@@ -1,13 +1,13 @@
-package io.github.ariesfish.elves
+package io.github.ariesfish.elly
 
 import java.util.function.Consumer
 import kotlin.collections.ArrayList
 
 abstract class Spider(val name: String) {
-    private val startUrls = ArrayList<String>()
-    lateinit var config: Config
-    val pipelines = ArrayList<Pipeline>()
+    val startUrls = ArrayList<String>()
+    private val pipelines = ArrayList<Pipeline>()
     val requests = ArrayList<Request>()
+    lateinit var config: Config
 
     open fun onStart(_config: Config) {
         config = _config

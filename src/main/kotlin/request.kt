@@ -1,4 +1,4 @@
-package io.github.ariesfish.elves
+package io.github.ariesfish.elly
 
 data class Request(val spider: Spider,
                    val url: String,

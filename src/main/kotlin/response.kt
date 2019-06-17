@@ -1,4 +1,4 @@
-package io.github.ariesfish.elves
+package io.github.ariesfish.elly
 
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
@@ -9,7 +9,10 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.lang.StringBuilder
 
-data class Response(val request: Request, val body: Body)
+class Response(_request: Request, inputStream: InputStream) {
+    val request = _request
+    val body = Body(inputStream, request.charset)
+}
 
 data class Body(val inputStream: InputStream,
                 val charset: String) {

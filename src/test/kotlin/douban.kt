@@ -1,6 +1,6 @@
-package io.github.ariesfish.elves.example
+package io.github.ariesfish.elly.example
 
-import io.github.ariesfish.elves.*
+import io.github.ariesfish.elly.*
 import kotlin.streams.toList
 
 class DoubanSpider(name: String) : Spider(name) {

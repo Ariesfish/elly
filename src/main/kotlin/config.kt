@@ -1,4 +1,4 @@
-package io.github.ariesfish.elves
+package io.github.ariesfish.elly
 
 class Config(var timeout: Int = 10_000,
              var delay: Int = 1000,

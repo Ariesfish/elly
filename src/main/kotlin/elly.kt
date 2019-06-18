@@ -4,15 +4,21 @@ import java.lang.RuntimeException
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
-import kotlin.streams.toList
 
-class Elly {
+class Elly private constructor() {
     val spiders = ArrayList<Spider>()
     lateinit var config: Config
 
-    fun start() {
-
+    companion object {
+        fun me(spider: Spider, config: Config = Config()): Elly {
+            val elly = Elly()
+            elly.spiders.add(spider)
+            elly.config = config
+            return elly
+        }
     }
+
+    fun start() = EllyEngine(this).start()
 
     fun onStart(consumer: Consumer<Config>) {
         EventManager.registerEvent(EllyEvent.GLOBAL_STARTED, consumer)
@@ -35,6 +41,8 @@ class EllyEngine(elly: Elly) {
         isRunning = true
         EventManager.fireEvent(EllyEvent.GLOBAL_STARTED, config)
 
+
+
         spiders.forEach { spider ->
             spider.config = config
             val requests: List<Request> = spider.startUrls.asSequence()
@@ -49,11 +57,42 @@ class EllyEngine(elly: Elly) {
                 super.run()
                 while (isRunning) {
                     if (!scheduler.hasRequest()) {
-                        sleep(100)
+                        EllyUtils.sleep(100)
                         continue
                     }
                     executorService.submit(Downloader(scheduler, scheduler.nextRequest()))
                 }
+            }
+        }
+
+        downloadThread.isDaemon = true
+        downloadThread.name = "download-thread"
+        downloadThread.start()
+    }
+
+    fun complete() {
+        while (isRunning) {
+            if (!scheduler.hasRequest()) {
+                EllyUtils.sleep(100)
+                continue
+            }
+
+            val response = scheduler.nextResponse()
+            val parser = response?.request?.parser
+            if (parser != null) {
+                parser
+            }
+        }
+    }
+}
+
+class EllyUtils {
+    companion object {
+        fun sleep(time: Long) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(time)
+            } catch (e: InterruptedException){
+                e.printStackTrace()
             }
         }
     }

@@ -1,13 +1,10 @@
 package io.github.ariesfish.elly
 
-class Config(var timeout: Int = 10_000,
-             var delay: Int = 1000,
-             val parallelThreads: Int,
-             val userAgent: UserAgent = UserAgent.CHROME_FOR_MAC,
-             val queueSize : Int) : Cloneable {
-
-    override fun clone(): Any = super.clone()
-}
+data class Config(val timeout: Int = 10_000,
+                  val delay: Int = 1000,
+                  val parallelThreads: Int = Runtime.getRuntime().availableProcessors() * 2,
+                  val userAgent: UserAgent = UserAgent.CHROME_FOR_MAC,
+                  val queueSize: Int = 10)
 
 enum class UserAgent(val agentName: String) {
     SAFARI_FOR_MAC("Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50"),
